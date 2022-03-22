@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {  } from 'react';
 import Menu from '../Menu/Menu';
 import Header from '../Header/Header';
-import Foods from '../Foods/Foods';
+import Store from '../Store/Store';
 import WhyChoose from '../WhyChoose/WhyChoose';
 import Footer from '../Footer/Footer';
 
@@ -10,7 +10,7 @@ const Home = () => {
         <>
             <Menu></Menu>
             <Header></Header>
-            <Foods></Foods>
+            <Store></Store>
             <WhyChoose></WhyChoose>
             <Footer></Footer>
         </>
