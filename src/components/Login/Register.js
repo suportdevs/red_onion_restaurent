@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import logo from '../../images/logo2.png';
 import iconBg from '../../images/icon-bg.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createUserEmailPassword, initializeLoginApp } from './LoginManager';
+import { useLocation } from 'react-router-dom';
+import { UserContext } from '../../App';
 
 initializeLoginApp();
 
 const Register = () => {
+    let navigate = useNavigate();
+    let location = useLocation();
+    const [loggedUser, setLoggedUser] = useContext(UserContext);
     const [user, setUser] = useState({
         name: "",
         email: "",
-        // password: "",
         success: "",
         error: ""
     });
+
+    let from = location.state?.from?.pathname || "/";
+
     const handleInputField = (e) => {
         let checkInputValidation = true;
 
@@ -28,26 +35,6 @@ const Register = () => {
         if (e.target.name === 'confirm-password') {
             let passwordField = new RegExp('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))');
             checkInputValidation = passwordField.test(e.target.value);
-            // if (password !== e.target.value) {
-            //     const newUserInfo = { ...user };
-            //     newUserInfo.error = "Password does not match.";
-            //     setUser(newUserInfo);
-            //     checkInputValidation = false;
-            // }else{
-                
-            //     if (passwordField.test(e.target.value) !== true) {
-            //         const newUserInfo = {...user};
-            //         newUserInfo.error = "Password is too week.";
-            //         setUser(newUserInfo);
-            //         checkInputValidation = false;
-            //     }else{
-            //         checkInputValidation = true;
-            //     }
-            //     const newUserInfo = { ...user };
-            //     newUserInfo.error = "";
-            //     setUser(newUserInfo);
-            //     checkInputValidation = true;
-            // }
         }
         if (checkInputValidation === true) {
             const newUserInfo = {...user};
@@ -62,11 +49,13 @@ const Register = () => {
         if(user.email && user.password){
             createUserEmailPassword(user.email, user.password)
             .then(response => {
-                console.log(response)
                 setUser(response);
+                setLoggedUser(response);
+                if(response){
+                    navigate(from, {replace: true});
+                }
             })
             .catch(error => {
-                console.log(error)
                 setUser(error);
             })
         }

@@ -12,13 +12,17 @@ import Cart from './components/Cart/Cart';
 import PlaceOrder from './components/PlaceOrder/PlaceOrder';
 import Delivery from './components/Delivery/Delivery';
 import Register from './components/Login/Register';
+import RedirectAuth from './components/RedirectAuth/RedirectAuth';
 
 export const CartContext = createContext();
+export const UserContext = createContext();
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [loggeduser, setLoggedUser] = useState([]);
   // console.log(cart);
   return (
+    <UserContext.Provider value={[loggeduser, setLoggedUser]}>
     <CartContext.Provider value={[cart, setCart]}>
     <Routes>
       <Route path='/' element={<Home />}>
@@ -29,11 +33,16 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/cart" element={<Cart />} />
-      <Route path="/order" element={<PlaceOrder />} />
+      <Route path="/order" element={
+                              <RedirectAuth>
+                                <PlaceOrder />
+                              </RedirectAuth>
+                            } />
       <Route path="/delivery" element={<Delivery/>} />
       <Route path="food-details/:key" element={<FoodDetails />} />
     </Routes>
     </CartContext.Provider>
+    </UserContext.Provider>
   );
 }
 

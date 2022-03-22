@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { PlusSmIcon, MinusIcon } from '@heroicons/react/outline';
 import logo from '../../images/logo2.png';
-import { CartContext } from '../../App';
+import { CartContext, UserContext } from '../../App';
 import { addToDatabaseCart, getDatabaseCart } from '../../utilities/fakedb';
 import storeData from '../../fakeData/store';
 import Loader from '../Loader/Loader';
@@ -9,6 +9,7 @@ import Menu from '../Menu/Menu';
 
 const PlaceOrder = () => {
     const [itemCount, setItemCount] = useState(0);
+    const [loggedUser, setLoggedUser] = useContext(UserContext);
     const [cart, setCart] = useContext(CartContext);
     useEffect(() => {
         const existingCart = getDatabaseCart();
@@ -59,6 +60,12 @@ const PlaceOrder = () => {
         const precision = num.toFixed(2);
         return Number(precision);
     }
+    let submit = false;
+    const handleInformation = (event, submit) => {
+        event.preventDefault();
+        console.log(submit);
+    }
+
     return (
         <>
         <Menu></Menu>
@@ -67,23 +74,25 @@ const PlaceOrder = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-60">
                     <div className='text-sm'>
                         <h3 className='font-bold text-2xl'>Edit Delivery Details</h3>
-                        <hr />
-                        <div className='my-5'>
-                            <input type="text" className='p-3 bg-gray-100 w-full rounded-md outline-none focus:ring-4 ring-gray-200' placeholder='Home Name' />
-                        </div>
-                        <div className='my-5'>
-                            <input type="text" className='p-3 bg-gray-100 w-full rounded-md outline-none focus:ring-4 ring-gray-200' placeholder='Road No and Home No' />
-                        </div>
-                        <div className='my-5'>
-                            <input type="text" className='p-3 bg-gray-100 w-full rounded-md outline-none focus:ring-4 ring-gray-200' placeholder='Flat, Suite and Floor' />
-                        </div>
-                        <div className='my-5'>
-                            <input type="text" className='p-3 bg-gray-100 w-full rounded-md outline-none focus:ring-4 ring-gray-200' placeholder='Bussiness Name' />
-                        </div>
-                        <div className='my-5'>
-                            <textarea type="text" className='p-3 bg-gray-100 w-full rounded-md outline-none focus:ring-4 ring-gray-200' placeholder='Add delivery instruction' ></textarea>
-                        </div>
-                        <button className='bg-rose-600 text-white p-3 w-full mb-5 rounded-md'>Save & Continue</button>
+                        <hr className='h-1 bg-gray-400'/>
+                        <form onClick={() => handleInformation(!submit)}>
+                            <div className='my-5'>
+                                <input type="text" className='p-3 bg-gray-100 w-full rounded-md outline-none focus:ring-4 ring-gray-200' placeholder='Home Name' />
+                            </div>
+                            <div className='my-5'>
+                                <input type="text" className='p-3 bg-gray-100 w-full rounded-md outline-none focus:ring-4 ring-gray-200' placeholder='Road No and Home No' />
+                            </div>
+                            <div className='my-5'>
+                                <input type="text" className='p-3 bg-gray-100 w-full rounded-md outline-none focus:ring-4 ring-gray-200' placeholder='Flat, Suite and Floor' />
+                            </div>
+                            <div className='my-5'>
+                                <input type="text" className='p-3 bg-gray-100 w-full rounded-md outline-none focus:ring-4 ring-gray-200' placeholder='Bussiness Name' />
+                            </div>
+                            <div className='my-5'>
+                                <textarea type="text" className='p-3 bg-gray-100 w-full rounded-md outline-none focus:ring-4 ring-gray-200' placeholder='Add delivery instruction' ></textarea>
+                            </div>
+                            <button type='submit' className='bg-rose-600 text-white p-3 w-full mb-5 rounded-md'>Save & Continue</button>
+                        </form>
                     </div>
                     <div>
                         <div className='w-10/12 justify-end items-end'>
